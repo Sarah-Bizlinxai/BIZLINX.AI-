@@ -1,0 +1,9 @@
+{
+  "name": "BizLinx AI: The Business Matchmaker and Marketplace ",
+  "description": "A gamified business M&A platform featuring Tinder-style swiping, AI-driven matching, and secure deal rooms.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

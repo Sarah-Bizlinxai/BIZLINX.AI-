@@ -1,0 +1,208 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile for buyers, sellers, and admins.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "displayName": { "type": "string" },
+        "role": { "type": "string", "enum": ["buyer", "seller", "admin"] },
+        "level": { "type": "number", "description": "Player level in the exit game" },
+        "xp": { "type": "number", "description": "Experience points earned" },
+        "currentQuest": { "type": "string", "description": "ID of the active quest" },
+        "completedQuests": { "type": "array", "items": { "type": "string" }, "description": "List of completed quest IDs" },
+        "verified": { "type": "boolean" },
+        "onboardingCompleted": { "type": "boolean", "description": "Whether the 20-question onboarding is done." },
+        "backgroundCheckStatus": { "type": "string", "enum": ["none", "pending", "cleared", "failed"] },
+        "creditScore": { "type": "number" },
+        "ssnLastFour": { "type": "string" },
+        "dlUrl": { "type": "string", "format": "uri" },
+        "subscriptionActive": { "type": "boolean", "description": "For sellers: $333/year status" },
+        "subscriptionExpiry": { "type": "string", "format": "date-time" },
+        "preferences": {
+          "type": "object",
+          "properties": {
+            "industries": { "type": "array", "items": { "type": "string" } },
+            "minRevenue": { "type": "number" },
+            "maxAskingPrice": { "type": "number" },
+            "locations": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "exitReadyScore": { "type": "number", "description": "Seller's readiness score (0-100)" },
+        "idealBuyerProfile": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "experience": { "type": "string" },
+            "minCapital": { "type": "number" }
+          }
+        },
+        "creditApprovalLetterUrl": { "type": "string", "format": "uri", "description": "Buyer's credit approval document URL" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Listing": {
+      "title": "Listing",
+      "description": "A business or franchise for sale.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "sellerId": { "type": "string", "description": "UID of the seller or broker" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "summary": { "type": "string", "description": "Short summary for swiping" },
+        "industry": { "type": "string" },
+        "revenue": { "type": "number" },
+        "ebitda": { "type": "number" },
+        "askingPrice": { "type": "number" },
+        "location": { "type": "string" },
+        "isFranchise": { "type": "boolean" },
+        "fddUrl": { "type": "string", "format": "uri" },
+        "websiteUrl": { "type": "string", "format": "uri" },
+        "imageUrl": { "type": "string", "format": "uri" },
+        "status": { "type": "string", "enum": ["active", "pending", "sold"] },
+        "verified": { "type": "boolean", "description": "Whether the listing financials are verified." },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["sellerId", "title", "industry", "askingPrice", "status"]
+    },
+    "Swipe": {
+      "title": "Swipe",
+      "description": "A buyer's swipe on a listing.",
+      "type": "object",
+      "properties": {
+        "buyerId": { "type": "string" },
+        "listingId": { "type": "string" },
+        "direction": { "type": "string", "enum": ["left", "right"] },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["buyerId", "listingId", "direction"]
+    },
+    "OnboardingAnswer": {
+      "title": "Onboarding Answer",
+      "description": "Answer to one of the 20 onboarding questions.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "questionId": { "type": "string" },
+        "answer": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "questionId", "answer"]
+    },
+    "AdminChat": {
+      "title": "Admin Chat",
+      "description": "Chat message between a seller and an admin.",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "receiverId": { "type": "string" },
+        "text": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["senderId", "receiverId", "text", "timestamp"]
+    },
+    "Purchase": {
+      "title": "Purchase",
+      "description": "A seller's purchase of a buyer's profile.",
+      "type": "object",
+      "properties": {
+        "sellerId": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "amount": { "type": "number" },
+        "stripeSessionId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["sellerId", "buyerId", "amount"]
+    },
+    "Match": {
+      "title": "Match",
+      "description": "AI-generated match between a buyer and a listing.",
+      "type": "object",
+      "properties": {
+        "buyerId": { "type": "string" },
+        "listingId": { "type": "string" },
+        "score": { "type": "number", "description": "Match score from 0 to 100" },
+        "reasoning": { "type": "string" }
+      },
+      "required": ["buyerId", "listingId", "score"]
+    },
+    "Deal": {
+      "title": "Deal",
+      "description": "An active deal room for a transaction.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "sellerId": { "type": "string" },
+        "listingId": { "type": "string" },
+        "status": { "type": "string", "enum": ["LOI", "DueDiligence", "Closing", "Closed"] },
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string", "format": "uri" },
+              "type": { "type": "string" },
+              "uploadedAt": { "type": "string", "format": "date-time" }
+            }
+          }
+        },
+        "checklist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "task": { "type": "string" },
+              "completed": { "type": "boolean" }
+            }
+          }
+        }
+      },
+      "required": ["buyerId", "sellerId", "listingId", "status"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Chat message between parties in a deal.",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "receiverId": { "type": "string" },
+        "dealId": { "type": "string" },
+        "text": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["senderId", "dealId", "text", "timestamp"]
+    },
+    "ContactRequest": {
+      "title": "Contact Request",
+      "description": "A request from a buyer to connect with a seller regarding a listing.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "sellerId": { "type": "string" },
+        "listingId": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "accepted", "denied"] },
+        "message": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["buyerId", "sellerId", "listingId", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": "User", "description": "User profiles" },
+    "/users/{userId}/onboardingAnswers/{answerId}": { "schema": "OnboardingAnswer", "description": "Onboarding Q&A" },
+    "/listings/{listingId}": { "schema": "Listing", "description": "Business listings" },
+    "/swipes/{swipeId}": { "schema": "Swipe", "description": "Buyer swipes" },
+    "/matches/{matchId}": { "schema": "Match", "description": "AI matches" },
+    "/deals/{dealId}": { "schema": "Deal", "description": "Active deal rooms" },
+    "/deals/{dealId}/messages/{messageId}": { "schema": "Message", "description": "Deal room chat" },
+    "/contactRequests/{requestId}": { "schema": "ContactRequest", "description": "Buyer-seller connection requests" },
+    "/adminChats/{chatId}": { "schema": "AdminChat", "description": "Seller-Admin chat" },
+    "/purchases/{purchaseId}": { "schema": "Purchase", "description": "Profile purchases" }
+  }
+}

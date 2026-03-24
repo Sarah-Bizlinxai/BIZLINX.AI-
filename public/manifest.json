@@ -1,0 +1,23 @@
+{
+  "name": "BizLinx AI: The Business Matchmaker",
+  "short_name": "BizLinx AI",
+  "description": "An interactive marketplace and deal management system for business sellers and buyers.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d9488",
+  "icons": [
+    {
+      "src": "https://picsum.photos/seed/bizlinx/192/192",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://picsum.photos/seed/bizlinx/512/512",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
